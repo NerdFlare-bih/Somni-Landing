@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Somni: Dream it. Become it.</title>
+<meta name="description" content="Somni is your AI-powered women's fitness companion, with personalized meal & workout plans, an AI trainer, and a motivational body visualizer, all in one app." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #120A21;
+    --surface:    #1F1433;
+    --surface-2:  #2A1D44;
+    --rosegold:   #D99994;
+    --lavender:   #A694D1;
+    --cream:      #F5EDE6;
+    --dimtext:    #A699AD;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--background);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .logo {
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  .gradient-text {
+    background: linear-gradient(90deg, var(--cream), var(--rosegold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .accent-gradient {
+    background: linear-gradient(90deg, var(--rosegold), var(--lavender));
+  }
+
+  .accent-text-gradient {
+    background: linear-gradient(90deg, var(--rosegold), var(--lavender));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ===== Background glow blobs ===== */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 { width: 420px; height: 420px; background: rgba(217,153,148,0.18); top: -120px; right: -100px; }
+  .glow-2 { width: 380px; height: 380px; background: rgba(166,148,209,0.16); top: 480px; left: -140px; }
+  .glow-3 { width: 420px; height: 420px; background: rgba(217,153,148,0.12); bottom: -100px; right: -120px; }
+
+  /* ===== Container ===== */
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== Nav ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(18, 10, 33, 0.75);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(166, 153, 173, 0.12);
+  }
+  .nav-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-links a {
+    color: var(--dimtext);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--cream);
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    padding: 90px 0 100px;
+    overflow: hidden;
+  }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(217, 153, 148, 0.12);
+    border: 1px solid rgba(217, 153, 148, 0.25);
+    color: var(--rosegold);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 22px;
+  }
+  .hero p.lead {
+    font-size: 18px;
+    color: var(--dimtext);
+    max-width: 480px;
+    margin-bottom: 36px;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(90deg, var(--rosegold), var(--lavender));
+    color: #1a1024;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 16px 32px;
+    border-radius: 28px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(217,153,148,0.25);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    color: var(--cream);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 16px 32px;
+    border-radius: 28px;
+    text-decoration: none;
+    border: 1px solid rgba(166,153,173,0.2);
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--rosegold); }
+
+  /* ===== Phone mockup ===== */
+  .phone-wrap {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  .phone {
+    width: 280px;
+    height: 580px;
+    background: var(--surface);
+    border-radius: 38px;
+    border: 1px solid rgba(166,153,173,0.15);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 8px rgba(0,0,0,0.35);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 90px; height: 18px;
+    background: #0c0716;
+    border-radius: 12px;
+    z-index: 5;
+  }
+  .phone-home-indicator {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 4px;
+    border-radius: 3px;
+    background: rgba(245,237,230,0.25);
+    z-index: 5;
+  }
+  .phone-screen {
+    height: 100%;
+    border-radius: 24px;
+    background: var(--background);
+    padding: 50px 14px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+  }
+  .phone-greeting {
+    font-size: 13px;
+    color: var(--dimtext);
+    margin-bottom: 2px;
+  }
+  .phone-name {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    margin-bottom: 8px;
+  }
+  .phone-card {
+    background: var(--surface-2);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(217,153,148,0.12);
+  }
+  .phone-card .icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    background: linear-gradient(135deg, rgba(217,153,148,0.25), rgba(166,148,209,0.18));
+    flex-shrink: 0;
+  }
+  .phone-card .text,
+  .phone-streak .text {
+    flex: 1;
+    min-width: 0;
+  }
+  .phone-card .text strong,
+  .phone-streak .text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .phone-card .text span,
+  .phone-streak .text span {
+    display: block;
+    font-size: 11px;
+    color: var(--dimtext);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .phone-streak {
+    border-radius: 18px;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(217,153,148,0.16), rgba(166,148,209,0.10));
+    border: 1px solid rgba(217,153,148,0.25);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .phone-streak .flame {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(217,153,148,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .phone-streak .text strong { font-size: 14px; }
+
+  .float-badge {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid rgba(166,153,173,0.18);
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .float-badge.b1 { top: 60px; left: -30px; }
+  .float-badge.b2 { bottom: 90px; right: -34px; }
+
+  /* ===== Sections ===== */
+  section { padding: 90px 0; position: relative; }
+  .section-head {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 56px;
+  }
+  .section-tag {
+    color: var(--rosegold);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .section-head p {
+    color: var(--dimtext);
+    font-size: 16px;
+  }
+
+  /* ===== Features grid ===== */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid rgba(166,153,173,0.10);
+    border-radius: 20px;
+    padding: 32px 28px;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(217,153,148,0.3);
+  }
+  .feature-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .feature-card p {
+    color: var(--dimtext);
+    font-size: 14px;
+  }
+  .feature-card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--lavender);
+    background: rgba(166,148,209,0.12);
+    border: 1px solid rgba(166,148,209,0.25);
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  /* ===== How it works ===== */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    position: relative;
+  }
+  .step {
+    text-align: center;
+    padding: 0 12px;
+  }
+  .step-num {
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rosegold), var(--lavender));
+    color: #1a1024;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+  }
+  .step h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .step p {
+    color: var(--dimtext);
+    font-size: 14px;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  /* ===== Disclaimer banner ===== */
+  .disclaimer {
+    background: var(--surface);
+    border: 1px solid rgba(217,153,148,0.2);
+    border-radius: 18px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    max-width: 760px;
+    margin: 50px auto 0;
+  }
+  .disclaimer .icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .disclaimer p {
+    font-size: 13px;
+    color: var(--dimtext);
+    line-height: 1.7;
+  }
+  .disclaimer strong { color: var(--cream); }
+
+  /* ===== Pricing ===== */
+  .pricing-card {
+    max-width: 460px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid rgba(217,153,148,0.25);
+    border-radius: 28px;
+    padding: 44px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(217,153,148,0.18), transparent 70%);
+  }
+  .pricing-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--rosegold), var(--lavender));
+    color: #1a1024;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+  .price {
+    font-size: 52px;
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    margin-bottom: 4px;
+  }
+  .price span {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dimtext);
+  }
+  .pricing-card .trial-note {
+    color: var(--dimtext);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .pricing-list {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pricing-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .pricing-list li .check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(217,153,148,0.18);
+    color: var(--rosegold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-list {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid rgba(166,153,173,0.10);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--cream);
+    text-align: left;
+    padding: 20px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .faq-question .chevron {
+    color: var(--rosegold);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-question .chevron { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-answer p {
+    padding: 0 24px 20px;
+    color: var(--dimtext);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ===== Final CTA ===== */
+  .final-cta {
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid rgba(217,153,148,0.2);
+    border-radius: 32px;
+    padding: 70px 40px;
+    margin: 0 auto;
+  }
+  .final-cta h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .final-cta p {
+    color: var(--dimtext);
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    border-top: 1px solid rgba(166,153,173,0.12);
+    padding: 48px 0 32px;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--dimtext);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--rosegold); }
+  .footer-copy {
+    color: var(--dimtext);
+    font-size: 13px;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 880px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .phone-wrap { order: -1; margin-bottom: 20px; }
+    .hero h1 { font-size: 40px; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: 1fr; gap: 40px; }
+    .nav-links { display: none; }
+    .nav-toggle { display: block; }
+    .float-badge { display: none; }
+  }
+  @media (max-width: 560px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 32px; }
+    .section-head h2 { font-size: 28px; }
+    .pricing-card { padding: 32px 24px; }
+    .final-cta { padding: 48px 24px; }
+    .phone { width: 240px; height: 500px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon"><img src="logo.png" alt="Somni logo"></div>
+      <span class="gradient-text">Somni</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow glow-1"></div>
+    <div class="container hero-inner">
+      <div>
+        <div class="badge">✨ Launching soon on the App Store</div>
+        <h1>Dream it.<br><span class="gradient-text">Become it.</span></h1>
+        <p class="lead">
+          Somni is your AI-powered fitness companion for women, with personalized meal &amp; workout plans,
+          a 24/7 AI trainer, and a motivational body visualizer, all in one beautifully designed app.
+        </p>
+        <div class="hero-ctas">
+          <a href="#features" class="btn-secondary">See Features ↓</a>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="float-badge b1">🔥 7-day streak!</div>
+        <div class="float-badge b2">💧 6/8 glasses</div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-greeting">Good morning,</div>
+            <div class="phone-name">Beautiful ✨</div>
+
+            <div class="phone-card">
+              <div class="icon">💬</div>
+              <div class="text">
+                <strong>Chat with Aria</strong>
+                <span>Your AI personal trainer</span>
+              </div>
+            </div>
+
+            <div class="phone-card">
+              <div class="icon">🥗</div>
+              <div class="text">
+                <strong>Today's Meal Plan</strong>
+                <span>Day 3 · 1,400 cal</span>
+              </div>
+            </div>
+
+            <div class="phone-card">
+              <div class="icon">🪞</div>
+              <div class="text">
+                <strong>Body Visualizer</strong>
+                <span>Preview your goal weight</span>
+              </div>
+            </div>
+
+            <div class="phone-streak">
+              <div class="flame">🔥</div>
+              <div class="text">
+                <strong>7 day streak</strong>
+                <span>Keep it up, you're glowing</span>
+              </div>
+            </div>
+          </div>
+          <div class="phone-home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="glow glow-2"></div>
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">Features</div>
+        <h2>Everything you need to <span class="accent-text-gradient">stay motivated</span></h2>
+        <p>Somni combines AI coaching, personalized planning, and daily motivation into one app built specifically for women's fitness goals.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>AI Personal Trainer</h3>
+          <p>Got a question about workouts, form, or nutrition? Ask Aria, your AI trainer, for expert answers and personalized guidance any time.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Personalized Meal Plans</h3>
+          <p>A full 7-day meal plan tailored to your goals and dietary preferences, with breakfast, lunch, dinner, and snacks organized by day.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Custom Workout Plans</h3>
+          <p>7-day workout programs built around your location, equipment, and intensity level, with warm-ups and cool-downs included.</p>
+        </div>
+        <div class="feature-card">
+          <h3>AI Body Visualizer</h3>
+          <p>Upload a photo and get an AI-generated preview of your goal weight, a fun way to visualize your progress and stay motivated.</p>
+          <span class="tag">AI Preview</span>
+        </div>
+        <div class="feature-card">
+          <h3>Streaks &amp; Check-ins</h3>
+          <p>Build momentum with daily check-ins and streaks that keep you coming back and celebrate your consistency.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Water &amp; Progress Tracking</h3>
+          <p>Track your daily water intake and watch your progress over time, all from one clean, easy-to-read dashboard.</p>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p>
+          <strong>About the Body Visualizer:</strong> Images generated by this feature are AI-created previews
+          meant for motivation, not predictions or guarantees of real results. Actual results depend on diet,
+          exercise, and consistency, and should not be used as medical or health guidance.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">How It Works</div>
+        <h2>Get started in <span class="accent-text-gradient">three simple steps</span></h2>
+        <p>No complicated setup. Just answer a few questions and Somni builds your personalized plan instantly.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Set Your Goals</h3>
+          <p>Tell Somni your current weight, goal weight, and preferences so your plan fits your life.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Get Your AI Plan</h3>
+          <p>Receive a personalized 7-day meal and workout plan, plus access to your AI trainer Aria.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Track &amp; Stay Motivated</h3>
+          <p>Check in daily, build your streak, and use the Body Visualizer to keep your goal in sight.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="glow glow-3"></div>
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">Pricing</div>
+        <h2>Simple, <span class="accent-text-gradient">all-access</span> pricing</h2>
+        <p>One plan, every feature. Start with a free trial, cancel any time.</p>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-badge">3-Day Free Trial</div>
+        <div class="price">$19.99 <span>/ month</span></div>
+        <p class="trial-note">Try Somni free for 3 days, then $19.99/month. Cancel anytime.</p>
+        <ul class="pricing-list">
+          <li><span class="check">✓</span> Unlimited AI trainer chat with Aria</li>
+          <li><span class="check">✓</span> Personalized 7-day meal plans</li>
+          <li><span class="check">✓</span> Personalized 7-day workout plans</li>
+          <li><span class="check">✓</span> AI Body Visualizer previews</li>
+          <li><span class="check">✓</span> Streaks, water &amp; progress tracking</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">FAQ</div>
+        <h2>Frequently asked <span class="accent-text-gradient">questions</span></h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            Is my health data private?
+            <span class="chevron">▾</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Most of your data, including your weight, goals, and plans, stays on your device. Photos used for the Body Visualizer are processed securely and not stored on our servers. See our <a href="https://rattle-aragon-7ae.notion.site/Somni-Privacy-Policy-37e967f6b50d80eaa47aefa1b844dcde" style="color: var(--rosegold);">Privacy Policy</a> for full details.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is the Body Visualizer accurate?
+            <span class="chevron">▾</span>
+          </button>
+          <div class="faq-answer">
+            <p>The Body Visualizer creates an AI-generated preview meant to inspire and motivate you. It's not a medical prediction or a guarantee of results. Actual outcomes depend on your diet, exercise, and consistency.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is Somni a substitute for medical advice?
+            <span class="chevron">▾</span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Somni's plans and AI chat are for informational and motivational purposes only. Always consult a healthcare provider before starting any new diet or exercise program.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Who is Somni for?
+            <span class="chevron">▾</span>
+          </button>
+          <div class="faq-answer">
+            <p>Somni is designed for women 18 and older who want a supportive, AI-powered companion for fitness and healthy habit-building.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How do I cancel my subscription?
+            <span class="chevron">▾</span>
+          </button>
+          <div class="faq-answer">
+            <p>Subscriptions are managed through the Apple App Store. You can cancel anytime from your iPhone's Settings → Subscriptions, at least 24 hours before renewal to avoid being charged.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="cta">
+    <div class="container">
+      <div class="final-cta">
+        <h2>Ready to <span class="accent-text-gradient">dream it</span> and become it?</h2>
+        <p>Somni is launching soon on the App Store.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="logo">
+        <div class="logo-icon"><img src="logo.png" alt="Somni logo"></div>
+        <span class="gradient-text">Somni</span>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://rattle-aragon-7ae.notion.site/Somni-Terms-of-Service-37e967f6b50d80238adbef08ebee9ff6">Terms of Service</a>
+        <a href="https://rattle-aragon-7ae.notion.site/Somni-Privacy-Policy-37e967f6b50d80eaa47aefa1b844dcde">Privacy Policy</a>
+        <a href="mailto:support@somni.fitness">Contact</a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Somni. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+
+      document.querySelectorAll('.faq-item.open').forEach(open => {
+        if (open !== item) {
+          open.classList.remove('open');
+          open.querySelector('.faq-answer').style.maxHeight = null;
+        }
+      });
+
+      if (isOpen) {
+        item.classList.remove('open');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
