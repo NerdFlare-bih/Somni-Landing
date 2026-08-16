@@ -652,6 +652,81 @@
     .final-cta { padding: 48px 24px; }
     .phone { width: 240px; height: 500px; }
   }
+
+  /* ===== Waitlist modal ===== */
+  .waitlist-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 6, 20, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .waitlist-overlay.open { display: flex; }
+  .waitlist-modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid rgba(217,153,148,0.25);
+    border-radius: 24px;
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .waitlist-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--dimtext);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .waitlist-close:hover { color: var(--cream); }
+  .waitlist-modal h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .waitlist-modal p {
+    font-size: 14px;
+    color: var(--dimtext);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .waitlist-form { display: flex; flex-direction: column; gap: 12px; }
+  .waitlist-input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(166,153,173,0.25);
+    background: var(--surface-2);
+    color: var(--cream);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+  }
+  .waitlist-input:focus { border-color: var(--rosegold); }
+  .waitlist-submit {
+    width: 100%;
+    justify-content: center;
+  }
+  .waitlist-error {
+    display: none;
+    color: var(--rosegold);
+    font-size: 13px;
+    margin-top: -4px;
+  }
+  .waitlist-success { display: none; }
+  .waitlist-success .check-icon { font-size: 40px; margin-bottom: 10px; }
+  .waitlist-success h3 { margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -684,6 +759,7 @@
           a 24/7 AI trainer, and a motivational body visualizer, all in one beautifully designed app.
         </p>
         <div class="hero-ctas">
+          <button type="button" class="btn-primary" onclick="openWaitlist()">Pre-Order Now</button>
           <a href="#features" class="btn-secondary">See Features ↓</a>
         </div>
       </div>
@@ -900,6 +976,7 @@
       <div class="final-cta">
         <h2>Ready to <span class="accent-text-gradient">dream it</span> and become it?</h2>
         <p>Somni is launching soon on the App Store.</p>
+        <button type="button" class="btn-primary" onclick="openWaitlist()" style="margin-top: 8px;">Pre-Order Now</button>
       </div>
     </div>
   </section>
@@ -923,6 +1000,84 @@
     <div class="footer-copy">© 2026 Somni. All rights reserved.</div>
   </div>
 </footer>
+
+<!-- Waitlist modal -->
+<div class="waitlist-overlay" id="waitlistOverlay" onclick="if(event.target===this) closeWaitlist()">
+  <div class="waitlist-modal">
+    <button type="button" class="waitlist-close" onclick="closeWaitlist()" aria-label="Close">✕</button>
+
+    <div id="waitlistFormView">
+      <h3>Pre-Order Somni</h3>
+      <p>Be first to know when Somni launches on the App Store. Join the waitlist, no payment required.</p>
+      <form class="waitlist-form" id="waitlistForm" onsubmit="return submitWaitlist(event)">
+        <input type="email" class="waitlist-input" id="waitlistEmail" placeholder="you@email.com" required autocomplete="email">
+        <div class="waitlist-error" id="waitlistError"></div>
+        <button type="submit" class="btn-primary waitlist-submit" id="waitlistSubmitBtn">Join the Waitlist</button>
+      </form>
+    </div>
+
+    <div id="waitlistSuccessView" class="waitlist-success">
+      <div class="check-icon">🎉</div>
+      <h3 id="waitlistSuccessTitle">You're on the list!</h3>
+      <p>We'll email you the moment Somni is live.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const WAITLIST_ENDPOINT = "https://somni-backend-production-a930.up.railway.app/waitlist";
+
+  function openWaitlist() {
+    document.getElementById('waitlistOverlay').classList.add('open');
+    document.getElementById('waitlistFormView').style.display = 'block';
+    document.getElementById('waitlistSuccessView').style.display = 'none';
+    document.getElementById('waitlistError').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWaitlist() {
+    document.getElementById('waitlistOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function submitWaitlist(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('waitlistEmail');
+    const errorEl     = document.getElementById('waitlistError');
+    const submitBtn   = document.getElementById('waitlistSubmitBtn');
+    const email       = emailInput.value.trim();
+
+    errorEl.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Joining...';
+
+    try {
+      const res  = await fetch(WAITLIST_ENDPOINT, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      document.getElementById('waitlistSuccessTitle').textContent =
+        data.alreadyJoined ? "You're already on the list!" : "You're on the list!";
+      document.getElementById('waitlistFormView').style.display = 'none';
+      document.getElementById('waitlistSuccessView').style.display = 'block';
+    } catch (err) {
+      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Join the Waitlist';
+    }
+
+    return false;
+  }
+</script>
 
 <script>
   document.querySelectorAll('.faq-question').forEach(btn => {
