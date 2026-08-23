@@ -849,6 +849,162 @@
   .demo-replay-btn:hover { border-color: var(--coral); }
   .demo-replay-btn svg { width: 13px; height: 13px; }
   .demo-hint { font-size: 11.5px; color: var(--dimtext); text-align: center; max-width: 280px; margin-top: -4px; }
+
+  /* ===== Somni Ad Set (AI Trainer / Meal Plan / Streak) ===== */
+  * { box-sizing: border-box; }
+    .sad-tabs { display: flex; gap: 8px; background: #1C1712; padding: 5px; border-radius: 30px; }
+  .sad-tab {
+    font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 13px;
+    padding: 9px 18px; border-radius: 24px; cursor: pointer; color: #A89C8E;
+    border: none; background: transparent; transition: background 0.2s, color 0.2s;
+  }
+  .sad-tab.active { background: linear-gradient(90deg, #FF6B45, #5B6EE8); color: #14100D; }
+
+  .sad-rig { display: none; flex-direction: column; align-items: center; gap: 1.25rem; }
+  .sad-rig.active { display: flex; }
+
+  .sad-frame-scaler {
+    width: 216px;
+    height: 468px;
+    position: relative;
+  }
+  .sad-frame {
+    width: 300px;
+    height: 649px;
+    border-radius: 46px;
+    background: #0d0a07;
+    padding: 12px;
+    box-shadow: 0 40px 90px rgba(0,0,0,0.55), 0 0 0 1px rgba(245,237,227,0.06);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(0.72);
+    transform-origin: top left;
+  }
+  .sad-notch {
+    position: absolute;
+    top: 12px; left: 50%; transform: translateX(-50%);
+    width: 86px; height: 22px; background: #0d0a07; border-radius: 12px;
+    z-index: 20;
+  }
+  .sad-screen {
+    width: 100%; height: 100%;
+    background: #14100D;
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sad-scene {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .sad-scene.active { opacity: 1; pointer-events: auto; }
+
+  .sad-topbar {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 24px 20px 4px;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14px;
+    color: #F5EDE3;
+    text-align: center;
+  }
+  .sad-topbar span { color: #A89C8E; font-weight: 500; font-size: 11px; margin-top: 2px; }
+
+  .sad-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    height: 48px; border-radius: 24px;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14px;
+    background: linear-gradient(90deg, #FF6B45, #5B6EE8);
+    color: #14100D;
+  }
+  .sad-chip {
+    font-size: 11.5px; font-weight: 600; color: #F5EDE3;
+    background: #1C1712; border: 1px solid rgba(255,107,69,0.3);
+    border-radius: 16px; padding: 8px 14px; white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ---- Trainer chat demo ---- */
+  .sad-chat-body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding: 10px 16px 6px; }
+  .sad-bubble-row { display: flex; gap: 8px; align-items: flex-end; }
+  .sad-bubble-row.sad-user { justify-content: flex-end; }
+  .sad-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #FF6B45, #5B6EE8); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-family: 'Quicksand', sans-serif; color: #14100D; }
+  .sad-bubble { max-width: 74%; padding: 10px 13px; border-radius: 16px; font-size: 12.5px; line-height: 1.45; opacity: 0; transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease; }
+  .sad-bubble.show { opacity: 1; transform: translateY(0); }
+  .sad-bubble.sad-ai { background: #1C1712; border-bottom-left-radius: 4px; }
+  .sad-bubble.sad-me { background: linear-gradient(90deg, rgba(255,107,69,0.9), rgba(91,110,232,0.9)); color: #14100D; font-weight: 500; border-bottom-right-radius: 4px; }
+  .sad-typing-dots { display: flex; gap: 4px; padding: 12px 14px; background: #1C1712; border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; opacity: 0; transition: opacity 0.3s ease; }
+  .sad-typing-dots.show { opacity: 1; }
+  .sad-typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: #A89C8E; animation: bounce 1.2s infinite; }
+  .sad-typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+  .sad-typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+  .sad-chip-row { display: flex; gap: 8px; padding: 8px 16px 14px; overflow: hidden; }
+  .sad-input-row { display: flex; align-items: center; gap: 10px; padding: 0 16px 20px; }
+  .sad-input-pill { flex: 1; height: 40px; border-radius: 20px; background: #1C1712; display: flex; align-items: center; padding: 0 14px; font-size: 12px; color: #A89C8E; }
+  .sad-input-pill .sad-caret { display: inline-block; width: 1px; height: 13px; background: #FF6B45; margin-left: 2px; animation: caretBlink 0.9s step-end infinite; }
+  @keyframes caretBlink { 50% { opacity: 0; } }
+  .sad-send-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FF6B45, #5B6EE8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* ---- Meal plan demo ---- */
+  .sad-diet-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 16px 18px 0; }
+  .sad-diet-chip { font-size: 10.5px; font-weight: 600; padding: 7px 11px; border-radius: 14px; background: #1C1712; color: #A89C8E; font-family: 'Inter', sans-serif; }
+  .sad-diet-chip.sad-sel { background: rgba(255,107,69,0.16); color: #FF6B45; border: 1px solid rgba(255,107,69,0.4); }
+  .sad-goal-line { text-align: center; font-size: 10.5px; color: #A89C8E; margin: 14px 0; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .sad-gen-btn-bar { padding: 0 18px; margin-top: auto; margin-bottom: 22px; }
+  .sad-plan-card { margin: 0 16px; background: #1C1712; border-radius: 16px; padding: 14px; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+  .sad-plan-card.show { opacity: 1; transform: translateY(0); }
+  .sad-plan-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .sad-plan-head strong { font-family: 'Quicksand', sans-serif; font-size: 13px; font-weight: 700; color: #FF6B45; }
+  .sad-plan-badge { font-size: 10px; font-weight: 700; color: #FF6B45; background: rgba(255,107,69,0.15); padding: 3px 9px; border-radius: 12px; font-family: 'Quicksand', sans-serif; }
+  .sad-meal-row { display: flex; gap: 8px; align-items: flex-start; padding: 7px 0; opacity: 0; transform: translateX(-6px); transition: opacity 0.35s ease, transform 0.35s ease; }
+  .sad-meal-row.show { opacity: 1; transform: translateX(0); }
+  .sad-meal-row .sad-ic { font-size: 14px; width: 20px; }
+  .sad-meal-row .sad-meal-label { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 10.5px; color: #F5EDE3; }
+  .sad-meal-row .sad-meal-desc { font-size: 10px; color: #A89C8E; line-height: 1.35; }
+  .sad-meal-row .sad-meal-cal { font-size: 9.5px; color: #5B6EE8; font-weight: 600; white-space: nowrap; margin-left: auto; padding-left: 6px; }
+  .sad-week-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(245,237,227,0.18); transition: background 0.3s, transform 0.3s; }
+  .sad-week-dot.on { background: #FF6B45; transform: scale(1.3); }
+
+  /* ---- Streak demo ---- */
+  .sad-mood-wrap { flex: 1; display: flex; flex-direction: column; padding: 20px 20px 0; }
+  .sad-mood-wrap h4 { font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: 700; margin: 4px 0 2px; }
+  .sad-mood-wrap .sad-sub { font-size: 10.5px; color: #A89C8E; margin: 0 0 18px; }
+  .sad-mood-label { font-size: 11px; color: #A89C8E; margin-bottom: 10px; }
+  .sad-mood-row { display: flex; justify-content: space-between; margin-bottom: 22px; }
+  .sad-mood-item { width: 42px; height: 42px; border-radius: 50%; background: #1C1712; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: background 0.3s, transform 0.3s, box-shadow 0.3s; }
+  .sad-mood-item.sad-sel { background: rgba(255,107,69,0.18); transform: scale(1.15); box-shadow: 0 0 0 2px #FF6B45; }
+  .sad-streak-reveal { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .sad-streak-flame { font-size: 52px; }
+  .sad-streak-num { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 40px; }
+  .sad-streak-label { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .sad-streak-msg { font-size: 12px; color: #A89C8E; }
+
+  /* ---- CTA (shared) ---- */
+  .sad-cta-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 0 30px; }
+  .sad-logo-badge { width: 52px; height: 52px; border-radius: 15px; background: linear-gradient(135deg, #FF6B45, #5B6EE8); display: flex; align-items: center; justify-content: center; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 24px; color: #14100D; margin-bottom: 4px; }
+  .sad-wordmark { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 22px; }
+  .sad-tagline { font-size: 12px; color: #A89C8E; text-align: center; margin-bottom: 12px; }
+  .sad-cta-wrap .sad-btn { width: 180px; }
+  .sad-launch-note { font-size: 10.5px; color: #746b60; margin-top: 8px; }
+
+  .sad-controls { display: flex; align-items: center; gap: 14px; }
+  .sad-dots { display: flex; gap: 6px; }
+  .sad-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(245,237,227,0.2); transition: background 0.3s; }
+  .sad-dot.on { background: #FF6B45; }
+  .sad-replay-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: transparent; border: 1px solid rgba(245,237,227,0.2);
+    color: #F5EDE3; font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500;
+    padding: 8px 16px; border-radius: 20px; cursor: pointer;
+  }
+  .sad-replay-btn:hover { border-color: #FF6B45; }
+  .sad-replay-btn svg { width: 13px; height: 13px; }
+  .sad-hint { font-size: 11.5px; color: #635b52; text-align: center; max-width: 280px; }
+  @keyframes sadSpin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -1071,6 +1227,210 @@
           </button>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- SOMNI IN ACTION (secondary feature set — quieter treatment than the transformation demo) -->
+  <section id="social-demo" style="padding: 50px 0 80px;">
+    <div class="container">
+      <div style="text-align:center; max-width:480px; margin:0 auto 28px;">
+        <div class="section-tag">More in the app</div>
+        <p style="font-size:14px; color:var(--dimtext); margin-top:8px;">A quick look at the AI trainer, meal plans, and daily streaks.</p>
+      </div>
+<div id="social-ad-set">
+<div class="sad-tabs">
+  <button class="sad-tab active" data-tab="trainer">AI Trainer</button>
+  <button class="sad-tab" data-tab="meal">Meal Plan</button>
+  <button class="sad-tab" data-tab="streak">Streak</button>
+</div>
+
+<!-- ============ TRAINER CHAT ============ -->
+<div class="sad-rig active" data-rig="trainer">
+  <div class="sad-frame-scaler">
+<div class="sad-frame">
+    <div class="sad-notch"></div>
+    <div class="sad-screen">
+      <div class="sad-scene s1" id="t-scene1">
+        <div class="sad-topbar">Aria<span>Your AI Personal Trainer</span></div>
+        <div class="sad-chat-body">
+          <div class="sad-bubble-row sad-user">
+            <div class="sad-bubble sad-me show" id="t-userMsg"></div>
+          </div>
+        </div>
+        <div class="sad-input-row">
+          <div class="sad-input-pill">Ask your trainer<span class="sad-caret"></span></div>
+          <div class="sad-send-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14100D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="sad-scene s2" id="t-scene2">
+        <div class="sad-topbar">Aria<span>Your AI Personal Trainer</span></div>
+        <div class="sad-chat-body">
+          <div class="sad-bubble-row sad-user"><div class="sad-bubble sad-me show">What should I eat today?</div></div>
+          <div class="sad-bubble-row"><div class="sad-avatar">S</div><div class="sad-typing-dots show"><span></span><span></span><span></span></div></div>
+        </div>
+      </div>
+
+      <div class="sad-scene s3" id="t-scene3">
+        <div class="sad-topbar">Aria<span>Your AI Personal Trainer</span></div>
+        <div class="sad-chat-body">
+          <div class="sad-bubble-row sad-user"><div class="sad-bubble sad-me show">What should I eat today?</div></div>
+          <div class="sad-bubble-row"><div class="sad-avatar">S</div><div class="sad-bubble sad-ai" id="t-aiReply">You've got 480 cal left. Try grilled chicken with veggies to stay on track &#128293;</div></div>
+        </div>
+        <div class="sad-chip-row" id="t-chips" style="padding-bottom: 22px;">
+          <div class="sad-chip">Give sad-me a workout &#128293;</div>
+          <div class="sad-chip">Track my calories</div>
+        </div>
+      </div>
+
+      <div class="sad-scene s4" id="t-scene4">
+        <div class="sad-cta-wrap">
+          <div class="sad-logo-badge">S</div>
+          <div class="sad-wordmark">Somni</div>
+          <div class="sad-tagline">Dream it. Become it.</div>
+          <div class="sad-btn">Pre-Order Now</div>
+          <div class="sad-launch-note">&#10024; Launching soon on the App Store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="sad-controls">
+    <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
+    <button class="sad-replay-btn" data-replay="trainer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Replay
+    </button>
+  </div>
+  <p class="sad-hint">Aria answering a real calorie question, positions Somni as having a built-in coach.</p>
+</div>
+
+<!-- ============ MEAL PLAN ============ -->
+<div class="sad-rig" data-rig="meal">
+  <div class="sad-frame-scaler">
+<div class="sad-frame">
+    <div class="sad-notch"></div>
+    <div class="sad-screen">
+      <div class="sad-scene s1" id="m-scene1" style="display:flex;">
+        <div class="sad-topbar">Meal Plan</div>
+        <div class="sad-diet-row">
+          <div class="sad-diet-chip sad-sel">&#127869;&#65039; No Preference</div>
+          <div class="sad-diet-chip">&#127814; Vegan</div>
+          <div class="sad-diet-chip">&#128001; Omnivore</div>
+          <div class="sad-diet-chip">&#127816; High Protein</div>
+        </div>
+        <div class="sad-goal-line">&#128293; Using your calorie goal: 1,200 cal/day</div>
+        <div class="sad-gen-btn-bar"><div class="sad-btn">Generate My Meal Plan</div></div>
+      </div>
+
+      <div class="sad-scene s2" id="m-scene2">
+        <div class="sad-topbar">Meal Plan</div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+          <div style="width:64px; height:64px; border-radius:50%; border:4px solid rgba(245,237,227,0.1); border-top-color:#FF6B45; animation:sadSpin 0.9s linear infinite;"></div>
+          <p style="margin:0; font-family:'Quicksand',sans-serif; font-weight:600; font-size:13.5px;">Generating&hellip;</p>
+        </div>
+      </div>
+
+      <div class="sad-scene s3" id="m-scene3">
+        <div class="sad-topbar">Meal Plan</div>
+        <div style="padding: 6px 16px 0; flex:1;">
+          <div class="sad-plan-card" id="m-planCard">
+            <div class="sad-plan-head"><strong id="m-dayTitle">Day 1 &mdash; Monday</strong><span class="sad-plan-badge" id="m-dayCal">1,160 cal</span></div>
+            <div class="sad-meal-row" data-meal="1"><span class="sad-ic" id="m-ic-1">&#127859;</span><div><div class="sad-meal-label" id="m-label-1">Breakfast</div><div class="sad-meal-desc" id="m-desc-1">Egg white &amp; veggie wrap</div></div><span class="sad-meal-cal" id="m-cal-1">260cal</span></div>
+            <div class="sad-meal-row" data-meal="2"><span class="sad-ic" id="m-ic-2">&#129367;</span><div><div class="sad-meal-label" id="m-label-2">Lunch</div><div class="sad-meal-desc" id="m-desc-2">Tuna melt, open-face</div></div><span class="sad-meal-cal" id="m-cal-2">280cal</span></div>
+            <div class="sad-meal-row" data-meal="3"><span class="sad-ic" id="m-ic-3">&#127828;</span><div><div class="sad-meal-label" id="m-label-3">Dinner</div><div class="sad-meal-desc" id="m-desc-3">Baked salmon &amp; veggies</div></div><span class="sad-meal-cal" id="m-cal-3">420cal</span></div>
+            <div class="sad-meal-row" data-meal="4"><span class="sad-ic" id="m-ic-4">&#127822;</span><div><div class="sad-meal-label" id="m-label-4">Snack</div><div class="sad-meal-desc" id="m-desc-4">Apple &amp; almond butter</div></div><span class="sad-meal-cal" id="m-cal-4">200cal</span></div>
+          </div>
+          <div class="sad-week-dots" id="m-weekDots" style="display:flex; justify-content:center; gap:5px; margin-top:14px;"></div>
+        </div>
+      </div>
+
+      <div class="sad-scene s4" id="m-scene4">
+        <div class="sad-cta-wrap">
+          <div class="sad-logo-badge">S</div>
+          <div class="sad-wordmark">Somni</div>
+          <div class="sad-tagline">Dream it. Become it.</div>
+          <div class="sad-btn">Pre-Order Now</div>
+          <div class="sad-launch-note">&#10024; Launching soon on the App Store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="sad-controls">
+    <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
+    <button class="sad-replay-btn" data-replay="meal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Replay
+    </button>
+  </div>
+  <p class="sad-hint">Real calorie math per meal, good for the "never overshoot your goal" angle.</p>
+</div>
+
+<!-- ============ STREAK ============ -->
+<div class="sad-rig" data-rig="streak">
+  <div class="sad-frame-scaler">
+<div class="sad-frame">
+    <div class="sad-notch"></div>
+    <div class="sad-screen">
+      <div class="sad-scene s1" id="s-scene1" style="display:flex;">
+        <div class="sad-topbar">Check In</div>
+        <div class="sad-mood-wrap">
+          <h4>Daily Check In &#10024;</h4>
+          <p class="sad-sub">Takes 10 seconds. Your future self will thank you.</p>
+          <p class="sad-mood-label">How are you feeling today?</p>
+          <div class="sad-mood-row">
+            <div class="sad-mood-item">&#128564;</div>
+            <div class="sad-mood-item">&#128532;</div>
+            <div class="sad-mood-item">&#128528;</div>
+            <div class="sad-mood-item">&#128522;</div>
+            <div class="sad-mood-item" id="s-fireMood">&#128293;</div>
+          </div>
+          <div class="sad-btn" id="s-logBtn">Log Check In</div>
+        </div>
+      </div>
+
+      <div class="sad-scene s2" id="s-scene2">
+        <div class="sad-topbar">Check In</div>
+        <div class="sad-streak-reveal">
+          <div style="width:64px; height:64px; border-radius:50%; border:4px solid rgba(245,237,227,0.1); border-top-color:#FF6B45; animation:sadSpin 0.9s linear infinite;"></div>
+        </div>
+      </div>
+
+      <div class="sad-scene s3" id="s-scene3">
+        <div class="sad-topbar">Check In</div>
+        <div class="sad-streak-reveal">
+          <div class="sad-streak-flame">&#128293;</div>
+          <div class="sad-streak-num" id="s-streakNum">0</div>
+          <div class="sad-streak-label">Day Streak &#127881;</div>
+          <div class="sad-streak-msg">Let's get it! &#128170;</div>
+        </div>
+      </div>
+
+      <div class="sad-scene s4" id="s-scene4">
+        <div class="sad-cta-wrap">
+          <div class="sad-logo-badge">S</div>
+          <div class="sad-wordmark">Somni</div>
+          <div class="sad-tagline">Dream it. Become it.</div>
+          <div class="sad-btn">Pre-Order Now</div>
+          <div class="sad-launch-note">&#10024; Launching soon on the App Store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="sad-controls">
+    <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
+    <button class="sad-replay-btn" data-replay="streak">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Replay
+    </button>
+  </div>
+  <p class="sad-hint">Mood check-in building into a streak count, good for the habit-building angle.</p>
+</div>
+</div>
     </div>
   </section>
 
@@ -1370,6 +1730,218 @@
     }, { threshold: 0.3 });
     observer.observe(phoneEl);
   })();
+</script>
+
+<script>
+(function () {
+  function typeText(el, text, ms, cb) {
+    el.textContent = '';
+    let i = 0;
+    const step = () => {
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(step, ms);
+      } else if (cb) cb();
+    };
+    step();
+  }
+
+  function animateCount(el, from, to, ms) {
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / ms, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function buildController(prefix, sceneIds, durations, onScene) {
+    const scenes = sceneIds.map(id => document.getElementById(id));
+    const rig = document.querySelector('[data-rig="' + prefix.replace(/-$/, '') + '"]');
+    const dots = rig.querySelectorAll('[data-dot]');
+    let timers = [];
+
+    function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
+    function pushTimer(fn, delay) { timers.push(setTimeout(fn, delay)); }
+
+    function showScene(i) {
+      scenes.forEach((s, idx) => s.classList.toggle('active', idx === i));
+      dots.forEach((d, idx) => d.classList.toggle('on', idx === i));
+      if (onScene) onScene(i, pushTimer);
+    }
+
+    function play() {
+      clearTimers();
+      let elapsed = 0;
+      durations.forEach((dur, i) => {
+        timers.push(setTimeout(() => showScene(i), elapsed));
+        elapsed += dur;
+      });
+      timers.push(setTimeout(play, elapsed + 1200));
+    }
+
+    function stop() { clearTimers(); }
+
+    return { play, stop };
+  }
+
+  const trainerCtrl = buildController('trainer', ['t-scene1','t-scene2','t-scene3','t-scene4'], [2800, 1800, 6600, 4000], (i) => {
+    if (i === 0) {
+      document.getElementById('t-userMsg').textContent = '';
+      document.getElementById('t-aiReply').classList.remove('show');
+      typeText(document.getElementById('t-userMsg'), 'What should I eat today?', 45);
+    }
+    if (i === 2) {
+      setTimeout(() => document.getElementById('t-aiReply').classList.add('show'), 100);
+    }
+  });
+
+  const weekPlan = [
+    { day: 'Day 1 &mdash; Monday',    cal: '1,160 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Egg white &amp; veggie wrap',    cal: '260cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Tuna melt, open-face',           cal: '280cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Baked salmon &amp; veggies',     cal: '420cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Apple &amp; almond butter',      cal: '200cal' },
+    ]},
+    { day: 'Day 2 &mdash; Tuesday',   cal: '1,130 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Greek yogurt parfait',           cal: '230cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Turkey &amp; avocado wrap',      cal: '300cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Chicken stir-fry',               cal: '380cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Hummus &amp; veggies',           cal: '220cal' },
+    ]},
+    { day: 'Day 3 &mdash; Wednesday', cal: '1,140 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Protein oatmeal',                cal: '250cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Grilled chicken salad',          cal: '310cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Turkey meatballs &amp; zoodles', cal: '380cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Greek yogurt &amp; honey',       cal: '200cal' },
+    ]},
+    { day: 'Day 4 &mdash; Thursday',  cal: '1,140 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Veggie egg white omelette',      cal: '220cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Quinoa power bowl',              cal: '340cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Shrimp tacos',                   cal: '370cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Trail mix',                      cal: '210cal' },
+    ]},
+    { day: 'Day 5 &mdash; Friday',    cal: '1,200 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Overnight oats &amp; berries',   cal: '270cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Chicken burrito bowl',           cal: '380cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Honey garlic salmon',            cal: '400cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Cottage cheese &amp; pineapple', cal: '150cal' },
+    ]},
+    { day: 'Day 6 &mdash; Saturday',  cal: '1,190 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Banana protein pancakes',        cal: '310cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Mediterranean shrimp salad',     cal: '300cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Steak &amp; arugula salad',      cal: '370cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Rice cake, PB &amp; banana',     cal: '210cal' },
+    ]},
+    { day: 'Day 7 &mdash; Sunday',    cal: '1,190 cal', meals: [
+      { ic: '&#127859;', label: 'Breakfast', desc: 'Breakfast burrito',              cal: '330cal' },
+      { ic: '&#129367;', label: 'Lunch',     desc: 'Soba noodle salad',              cal: '300cal' },
+      { ic: '&#127828;', label: 'Dinner',    desc: 'Pesto chicken &amp; potatoes',   cal: '360cal' },
+      { ic: '&#127822;', label: 'Snack',     desc: 'Dark chocolate &amp; almonds',   cal: '200cal' },
+    ]},
+  ];
+
+  const weekDotsEl = document.getElementById('m-weekDots');
+  weekPlan.forEach((_, idx) => {
+    const d = document.createElement('div');
+    d.className = 'sad-week-dot';
+    d.dataset.weekDot = idx;
+    weekDotsEl.appendChild(d);
+  });
+
+  function renderDay(dayObj) {
+    document.getElementById('m-dayTitle').innerHTML = dayObj.day;
+    document.getElementById('m-dayCal').textContent = dayObj.cal;
+    dayObj.meals.forEach((m, idx) => {
+      const n = idx + 1;
+      document.getElementById('m-ic-' + n).innerHTML = m.ic;
+      document.getElementById('m-label-' + n).textContent = m.label;
+      document.getElementById('m-desc-' + n).innerHTML = m.desc;
+      document.getElementById('m-cal-' + n).textContent = m.cal;
+    });
+  }
+
+  function setWeekDot(idx) {
+    weekDotsEl.querySelectorAll('.sad-week-dot').forEach((d, i) => d.classList.toggle('on', i === idx));
+  }
+
+  const DAY_HOLD = 1750;
+
+  const mealCtrl = buildController('meal', ['m-scene1','m-scene2','m-scene3','m-scene4'], [2600, 1800, 800 + weekPlan.length * DAY_HOLD + 700, 4000], (i, pushTimer) => {
+    if (i === 2) {
+      renderDay(weekPlan[0]);
+      setWeekDot(0);
+      const card = document.getElementById('m-planCard');
+      card.classList.remove('show');
+      document.querySelectorAll('#m-planCard .sad-meal-row').forEach(r => r.classList.remove('show'));
+      void card.offsetWidth;
+      pushTimer(() => card.classList.add('show'), 50);
+      document.querySelectorAll('#m-planCard .sad-meal-row').forEach((row, idx) => {
+        pushTimer(() => row.classList.add('show'), 300 + idx * 250);
+      });
+
+      for (let d = 1; d < weekPlan.length; d++) {
+        const t = 800 + d * DAY_HOLD;
+        pushTimer(() => {
+          card.classList.remove('show');
+        }, t);
+        pushTimer(() => {
+          renderDay(weekPlan[d]);
+          setWeekDot(d);
+          void card.offsetWidth;
+          card.classList.add('show');
+        }, t + 180);
+      }
+    }
+  });
+
+  const streakCtrl = buildController('streak', ['s-scene1','s-scene2','s-scene3','s-scene4'], [3000, 1500, 6500, 4000], (i) => {
+    if (i === 0) {
+      setTimeout(() => document.getElementById('s-fireMood').classList.add('sad-sel'), 900);
+    }
+    if (i === 2) {
+      document.getElementById('s-streakNum').textContent = '6';
+      setTimeout(() => animateCount(document.getElementById('s-streakNum'), 6, 7, 700), 200);
+    }
+  });
+
+  const controllers = { trainer: trainerCtrl, meal: mealCtrl, streak: streakCtrl };
+  let activeTab = 'trainer';
+  let sadStarted = false;
+
+  document.querySelectorAll('.sad-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      if (tab === activeTab) return;
+      controllers[activeTab].stop();
+      document.querySelectorAll('.sad-tab').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.sad-rig').forEach(r => r.classList.toggle('active', r.dataset.rig === tab));
+      activeTab = tab;
+      controllers[tab].play();
+    });
+  });
+
+  document.querySelectorAll('[data-replay]').forEach(btn => {
+    btn.addEventListener('click', () => controllers[btn.dataset.replay].play());
+  });
+
+  const sadRoot = document.getElementById('social-ad-set');
+  if (sadRoot) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !sadStarted) {
+          sadStarted = true;
+          observer.disconnect();
+          trainerCtrl.play();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(sadRoot.querySelector('.sad-frame'));
+  }
+})();
 </script>
 
 <script>
