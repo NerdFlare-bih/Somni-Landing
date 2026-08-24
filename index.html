@@ -1012,6 +1012,7 @@
   .sad-replay-btn svg { width: 13px; height: 13px; }
   .sad-hint { font-size: 11.5px; color: #635b52; text-align: center; max-width: 280px; }
   @keyframes sadSpin { to { transform: rotate(360deg); } }
+  @keyframes sadScanSweep { 0% { top: 4px; } 50% { top: 122px; } 100% { top: 4px; } }
 </style>
 </head>
 <body>
@@ -1249,6 +1250,8 @@
   <button class="sad-tab active" data-tab="trainer">AI Trainer</button>
   <button class="sad-tab" data-tab="meal">Meal Plan</button>
   <button class="sad-tab" data-tab="streak">Streak</button>
+  <button class="sad-tab" data-tab="scan">Barcode Scan</button>
+  <button class="sad-tab" data-tab="workout">Workouts</button>
 </div>
 
 <!-- ============ TRAINER CHAT ============ -->
@@ -1464,6 +1467,161 @@
     </button>
   </div>
   <p class="sad-hint">Mood check-in building into a streak count, good for the habit-building angle.</p>
+</div>
+
+<!-- ============ BARCODE SCAN ============ -->
+<div class="sad-rig" data-rig="scan">
+  <div class="sad-frame">
+    <div class="sad-notch"></div>
+    <div class="sad-screen">
+      <div class="sad-scene s1" id="sc-scene1" style="display:flex;">
+        <div class="sad-topbar">Log Food</div>
+        <div style="display:flex; gap:10px; padding: 16px 16px 0;">
+          <div style="flex:1; display:flex; align-items:center; gap:8px; padding:13px 16px; background:#1C1712; border-radius:14px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A89C8E" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span style="font-size:13px; color:#A89C8E;">Search foods&hellip;</span>
+          </div>
+          <div id="sc-scanBtn" style="width:46px; height:46px; border-radius:14px; background:linear-gradient(90deg,#FF6B45,#5B6EE8); display:flex; align-items:center; justify-content:center; transition:transform 0.15s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14100D" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="8" x2="7" y2="16"></line><line x1="11" y1="8" x2="11" y2="16"></line><line x1="14" y1="8" x2="14" y2="16"></line><line x1="17" y1="8" x2="17" y2="16"></line></svg>
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+      </div>
+
+      <div class="sad-scene s2" id="sc-scene2" style="background:#050403;">
+        <div style="position:absolute; top:0; left:0; right:0; padding:24px 20px 4px; display:flex; justify-content:flex-end; z-index:5;">
+          <div style="width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;">
+          <div style="position:relative; width:220px; height:130px; border:3px solid #FF6B45; border-radius:16px; overflow:hidden;">
+            <div id="sc-scanline" style="position:absolute; left:0; right:0; top:0; height:3px; background:#FF6B45; box-shadow:0 0 12px #FF6B45;"></div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:2px; opacity:0.85;">
+              <div style="width:2px; height:60px; background:#F5EDE3;"></div><div style="width:1px; height:60px; background:#F5EDE3;"></div><div style="width:3px; height:60px; background:#F5EDE3;"></div><div style="width:1px; height:60px; background:#F5EDE3;"></div><div style="width:2px; height:60px; background:#F5EDE3;"></div><div style="width:1px; height:60px; background:#F5EDE3;"></div><div style="width:3px; height:60px; background:#F5EDE3;"></div><div style="width:2px; height:60px; background:#F5EDE3;"></div><div style="width:1px; height:60px; background:#F5EDE3;"></div><div style="width:2px; height:60px; background:#F5EDE3;"></div>
+            </div>
+          </div>
+          <p style="margin:0; font-size:13px; color:#fff; text-align:center; padding:0 40px;">Line up the barcode inside the frame</p>
+        </div>
+      </div>
+
+      <div class="sad-scene s3" id="sc-scene3">
+        <div class="sad-topbar">Log Food</div>
+        <div style="padding: 10px 16px 0; flex:1;">
+          <div class="sad-plan-card show" style="opacity:1; transform:none;">
+            <div class="sad-plan-head"><strong style="color:#FF6B45;">Nutella</strong><span class="sad-plan-badge">Scanned</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0 10px;">
+              <span style="font-size:12px; color:#A89C8E;">Amount</span>
+              <span style="font-size:14px; font-weight:700; color:#FF6B45;" id="sc-grams">100 g</span>
+            </div>
+            <div class="sad-meal-row show" style="border-top:1px solid rgba(245,237,227,0.08); padding-top:10px; opacity:1; transform:none;"><span class="sad-ic">&#128293;</span><div><div class="sad-meal-label">Calories</div></div><span class="sad-meal-cal" id="sc-cal">539cal</span></div>
+            <div class="sad-meal-row show" style="opacity:1; transform:none;"><span class="sad-ic">&#129370;</span><div><div class="sad-meal-label">Protein</div></div><span class="sad-meal-cal" id="sc-p">6.3g</span></div>
+            <div class="sad-meal-row show" style="opacity:1; transform:none;"><span class="sad-ic">&#127793;</span><div><div class="sad-meal-label">Carbs</div></div><span class="sad-meal-cal" id="sc-c">57.5g</span></div>
+            <div class="sad-meal-row show" style="opacity:1; transform:none;"><span class="sad-ic">&#129389;</span><div><div class="sad-meal-label">Fat</div></div><span class="sad-meal-cal" id="sc-f">30.9g</span></div>
+          </div>
+          <div style="margin-top:14px;"><div class="sad-btn">Add to Snack</div></div>
+        </div>
+      </div>
+
+      <div class="sad-scene s4" id="sc-scene4">
+        <div class="sad-cta-wrap">
+          <div class="sad-logo-badge">S</div>
+          <div class="sad-wordmark">Somni</div>
+          <div class="sad-tagline">Dream it. Become it.</div>
+          <div class="sad-btn">Pre-Order Now</div>
+          <div class="sad-launch-note">&#10024; Launching soon on the App Store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sad-controls">
+    <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
+    <button class="sad-replay-btn" data-replay="scan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Replay
+    </button>
+  </div>
+  <p class="sad-hint">Scan a barcode, macros fill in automatically. No more typing every packaged food by hand.</p>
+</div>
+
+<!-- ============ WORKOUT LOG ============ -->
+<div class="sad-rig" data-rig="workout">
+  <div class="sad-frame">
+    <div class="sad-notch"></div>
+    <div class="sad-screen">
+      <div class="sad-scene s1" id="wk-scene1" style="display:flex;">
+        <div class="sad-topbar">Progress</div>
+        <div style="padding: 10px 16px 0;">
+          <div style="display:flex; background:#1C1712; border-radius:12px; padding:3px; font-size:11px; font-weight:600;">
+            <div style="flex:1; text-align:center; padding:7px 0; color:#A89C8E;">Measurements</div>
+            <div style="flex:1; text-align:center; padding:7px 0; color:#A89C8E;">Photos</div>
+            <div style="flex:1; text-align:center; padding:7px 0; background:linear-gradient(90deg,#FF6B45,#5B6EE8); border-radius:9px; color:#14100D;">Workouts</div>
+          </div>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:0 30px;">
+          <div style="font-size:34px;">&#127947;&#65039;</div>
+          <p style="margin:0; font-size:13px; font-weight:600; color:#F5EDE3;">No lifts logged yet</p>
+          <p style="margin:0; font-size:11px; color:#A89C8E; text-align:center; line-height:1.4;">Tap + to log your first set and track real strength progress</p>
+        </div>
+      </div>
+
+      <div class="sad-scene s2" id="wk-scene2">
+        <div class="sad-topbar">Log a Set</div>
+        <div style="padding: 14px 18px 0;">
+          <div style="font-size:11px; color:#A89C8E; margin-bottom:6px;">Exercise</div>
+          <div style="padding:13px 16px; background:#1C1712; border-radius:14px; font-size:14px; color:#F5EDE3; margin-bottom:14px;" id="wk-exerciseField">Bench Press<span style="display:inline-block; width:1px; height:13px; background:#FF6B45; margin-left:2px; animation:caretBlink 0.9s step-end infinite;"></span></div>
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+              <div style="font-size:11px; color:#A89C8E; margin-bottom:6px;">Weight (lbs)</div>
+              <div style="padding:13px 16px; background:#1C1712; border-radius:14px; font-size:14px; color:#F5EDE3;" id="wk-weightField">135</div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:11px; color:#A89C8E; margin-bottom:6px;">Reps</div>
+              <div style="padding:13px 16px; background:#1C1712; border-radius:14px; font-size:14px; color:#F5EDE3;" id="wk-repsField">10</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 16px 18px 0;"><div class="sad-btn">Add Set</div></div>
+      </div>
+
+      <div class="sad-scene s3" id="wk-scene3">
+        <div class="sad-topbar">Log a Set</div>
+        <div style="padding: 14px 18px 0; flex:1;">
+          <div style="font-size:12px; font-weight:600; color:#A89C8E; margin-bottom:10px;">Logged this session</div>
+          <div id="wk-sessionList" style="display:flex; flex-direction:column; gap:8px;"></div>
+          <div style="margin-top:18px; padding:14px; background:#1C1712; border-radius:14px; display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,107,69,0.15); display:flex; align-items:center; justify-content:center; font-size:16px;">&#127947;&#65039;</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600; color:#F5EDE3;">Bench Press</div>
+              <div style="font-size:11px; color:#A89C8E;">Last: 145 lbs &times; 8</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:15px; font-weight:700; color:#5B6EE8;">145</div>
+              <div style="font-size:8px; color:#A89C8E;">best lbs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sad-scene s4" id="wk-scene4">
+        <div class="sad-cta-wrap">
+          <div class="sad-logo-badge">S</div>
+          <div class="sad-wordmark">Somni</div>
+          <div class="sad-tagline">Dream it. Become it.</div>
+          <div class="sad-btn">Pre-Order Now</div>
+          <div class="sad-launch-note">&#10024; Launching soon on the App Store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sad-controls">
+    <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
+    <button class="sad-replay-btn" data-replay="workout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+      Replay
+    </button>
+  </div>
+  <p class="sad-hint">Real sets, reps, and weight, logged and charted over time. Not just a prescribed plan.</p>
 </div>
 </div>
     </div>
@@ -1965,7 +2123,42 @@
     }
   });
 
-  const controllers = { trainer: trainerCtrl, meal: mealCtrl, streak: streakCtrl };
+  const scanCtrl = buildController('scan', ['sc-scene1','sc-scene2','sc-scene3','sc-scene4'], [2200, 2800, 6000, 4000], (i) => {
+    if (i === 0) {
+      const btn = document.getElementById('sc-scanBtn');
+      btn.style.transform = 'scale(1)';
+      setTimeout(() => { btn.style.transform = 'scale(0.88)'; }, 1600);
+      setTimeout(() => { btn.style.transform = 'scale(1)'; }, 1850);
+    }
+    if (i === 1) {
+      const line = document.getElementById('sc-scanline');
+      line.style.animation = 'none';
+      void line.offsetWidth;
+      line.style.animation = 'sadScanSweep 1.3s ease-in-out infinite';
+    }
+  });
+
+  const workoutCtrl = buildController('workout', ['wk-scene1','wk-scene2','wk-scene3','wk-scene4'], [2600, 3200, 6200, 4000], (i, pushTimer) => {
+    if (i === 2) {
+      const list = document.getElementById('wk-sessionList');
+      list.innerHTML = '';
+      const items = [
+        '135 lbs &times; 10',
+        '140 lbs &times; 8',
+        '145 lbs &times; 6',
+      ];
+      items.forEach((label, idx) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; align-items:center; gap:8px; opacity:0; transition:opacity 0.35s ease;';
+        row.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>' +
+          '<span style="font-size:12.5px; color:#F5EDE3;">Bench Press: ' + label + '</span>';
+        list.appendChild(row);
+        pushTimer(() => { row.style.opacity = '1'; }, 250 + idx * 500);
+      });
+    }
+  });
+
+  const controllers = { trainer: trainerCtrl, meal: mealCtrl, streak: streakCtrl, scan: scanCtrl, workout: workoutCtrl };
   let activeTab = 'trainer';
   let sadStarted = false;
 
