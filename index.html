@@ -864,7 +864,8 @@
   .sad-rig.active { display: flex; }
   .sad-side { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
   @media (min-width: 900px) {
-    .sad-rig.active { flex-direction: row; justify-content: center; gap: 2.5rem; }
+    .sad-rig.active { flex-direction: row; justify-content: flex-start; align-items: center; gap: 2.5rem; }
+    .sad-side { flex: 1; }
   }
 
   .sad-frame-scaler {
