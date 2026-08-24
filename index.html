@@ -862,19 +862,16 @@
 
   .sad-rig { display: none; flex-direction: column; align-items: center; gap: 1.25rem; }
   .sad-rig.active { display: flex; }
+  .sad-side { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+  @media (min-width: 900px) {
+    .sad-rig.active { flex-direction: row; justify-content: center; gap: 2.5rem; }
+  }
 
   .sad-frame-scaler {
     width: 216px;
     height: 468px;
     position: relative;
-  }
-  @media (min-width: 1450px) {
-    .sad-frame-scaler {
-      position: absolute;
-      left: calc(620px - 50vw);
-      top: 50%;
-      transform: translateY(-50%);
-    }
+    flex-shrink: 0;
   }
   .sad-frame {
     width: 300px;
@@ -1298,7 +1295,7 @@
           <div class="sad-bubble-row"><div class="sad-avatar">S</div><div class="sad-bubble sad-ai" id="t-aiReply">You've got 480 cal left. Try grilled chicken with veggies to stay on track &#128293;</div></div>
         </div>
         <div class="sad-chip-row" id="t-chips" style="padding-bottom: 22px;">
-          <div class="sad-chip">Give sad-me a workout &#128293;</div>
+          <div class="sad-chip">Give me a workout &#128293;</div>
           <div class="sad-chip">Track my calories</div>
         </div>
       </div>
@@ -1315,6 +1312,7 @@
     </div>
   </div>
 </div>
+  <div class="sad-side">
   <div class="sad-controls">
     <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
     <button class="sad-replay-btn" data-replay="trainer">
@@ -1323,6 +1321,7 @@
     </button>
   </div>
   <p class="sad-hint">Aria answering a real calorie question, positions Somni as having a built-in coach.</p>
+  </div>
 </div>
 
 <!-- ============ MEAL PLAN ============ -->
@@ -1405,6 +1404,7 @@
     </div>
   </div>
 </div>
+  <div class="sad-side">
   <div class="sad-controls">
     <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
     <button class="sad-replay-btn" data-replay="meal">
@@ -1413,6 +1413,7 @@
     </button>
   </div>
   <p class="sad-hint">Real calorie math per meal, good for the "never overshoot your goal" angle.</p>
+  </div>
 </div>
 
 <!-- ============ STREAK ============ -->
@@ -1467,6 +1468,7 @@
     </div>
   </div>
 </div>
+  <div class="sad-side">
   <div class="sad-controls">
     <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
     <button class="sad-replay-btn" data-replay="streak">
@@ -1475,6 +1477,7 @@
     </button>
   </div>
   <p class="sad-hint">Mood check-in building into a streak count, good for the habit-building angle.</p>
+  </div>
 </div>
 
 <!-- ============ BARCODE SCAN ============ -->
@@ -1544,6 +1547,7 @@
     </div>
   </div>
   </div>
+  <div class="sad-side">
   <div class="sad-controls">
     <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
     <button class="sad-replay-btn" data-replay="scan">
@@ -1552,6 +1556,7 @@
     </button>
   </div>
   <p class="sad-hint">Scan a barcode, macros fill in automatically. No more typing every packaged food by hand.</p>
+  </div>
 </div>
 
 <!-- ============ WORKOUT LOG ============ -->
@@ -1626,6 +1631,7 @@
     </div>
   </div>
   </div>
+  <div class="sad-side">
   <div class="sad-controls">
     <div class="sad-dots"><div class="sad-dot" data-dot="0"></div><div class="sad-dot" data-dot="1"></div><div class="sad-dot" data-dot="2"></div><div class="sad-dot" data-dot="3"></div></div>
     <button class="sad-replay-btn" data-replay="workout">
@@ -1634,6 +1640,7 @@
     </button>
   </div>
   <p class="sad-hint">Real sets, reps, and weight, logged and charted over time. Not just a prescribed plan.</p>
+  </div>
 </div>
 </div>
     </div>
