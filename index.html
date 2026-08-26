@@ -866,8 +866,13 @@
   .sad-info { display: none; }
   @media (min-width: 900px) {
     .sad-rig.active { flex-direction: row; justify-content: flex-start; align-items: center; gap: 2.5rem; }
-    .sad-info { display: block; flex: 1; }
+    .sad-info { display: block; flex: 1; max-width: 440px; }
   }
+  .sad-info-eyebrow { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--coral); margin-bottom: 10px; }
+  .sad-info h3 { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.25; margin: 0 0 12px; }
+  .sad-info p { font-size: 14.5px; color: var(--dimtext); line-height: 1.6; margin: 0 0 22px; }
+  .sad-info .pricing-list { margin-bottom: 0; gap: 12px; }
+  .sad-info .pricing-list li { font-size: 14px; }
 
   .sad-frame-scaler {
     width: 216px;
@@ -1322,7 +1327,16 @@
     </button>
   </div>
   </div>
-  <div class="sad-info"></div>
+  <div class="sad-info">
+    <div class="sad-info-eyebrow">AI Trainer</div>
+    <h3>Ask anything. Get an <span class="accent-text-gradient">answer that fits you</span></h3>
+    <p>Aria knows your calories, your goals, and your history, so she never gives generic advice.</p>
+    <ul class="pricing-list">
+      <li><span class="check">✓</span> Personalized to your daily calorie budget</li>
+      <li><span class="check">✓</span> Available 24/7, no waiting on a human coach</li>
+      <li><span class="check">✓</span> Remembers your goals across every chat</li>
+    </ul>
+  </div>
 </div>
 
 <!-- ============ MEAL PLAN ============ -->
@@ -1414,7 +1428,16 @@
     </button>
   </div>
   </div>
-  <div class="sad-info"></div>
+  <div class="sad-info">
+    <div class="sad-info-eyebrow">Meal Plan</div>
+    <h3>A full day of meals that <span class="accent-text-gradient">actually hits your goal</span></h3>
+    <p>Pick a diet style and Somni builds a day's meals, calorie by calorie, down to the exact target.</p>
+    <ul class="pricing-list">
+      <li><span class="check">✓</span> Breakfast to snack, planned in seconds</li>
+      <li><span class="check">✓</span> Hits your daily calorie goal exactly</li>
+      <li><span class="check">✓</span> New plan any time you want variety</li>
+    </ul>
+  </div>
 </div>
 
 <!-- ============ STREAK ============ -->
@@ -1478,7 +1501,16 @@
     </button>
   </div>
   </div>
-  <div class="sad-info"></div>
+  <div class="sad-info">
+    <div class="sad-info-eyebrow">Daily Streak</div>
+    <h3>Ten seconds a day <span class="accent-text-gradient">keeps you coming back</span></h3>
+    <p>A quick mood check-in turns into a streak you don't want to break.</p>
+    <ul class="pricing-list">
+      <li><span class="check">✓</span> 10-second daily check-in</li>
+      <li><span class="check">✓</span> Visual streak count keeps you motivated</li>
+      <li><span class="check">✓</span> Builds the habit, not just the plan</li>
+    </ul>
+  </div>
 </div>
 
 <!-- ============ BARCODE SCAN ============ -->
@@ -1557,7 +1589,16 @@
     </button>
   </div>
   </div>
-  <div class="sad-info"></div>
+  <div class="sad-info">
+    <div class="sad-info-eyebrow">Barcode Scan</div>
+    <h3>Scan it. <span class="accent-text-gradient">Macros done.</span></h3>
+    <p>Point your camera at any packaged food and the calories, protein, carbs, and fat fill in automatically.</p>
+    <ul class="pricing-list">
+      <li><span class="check">✓</span> No more manual macro entry</li>
+      <li><span class="check">✓</span> Works on any packaged grocery item</li>
+      <li><span class="check">✓</span> Logs straight to your daily total</li>
+    </ul>
+  </div>
 </div>
 
 <!-- ============ WORKOUT LOG ============ -->
@@ -1641,7 +1682,16 @@
     </button>
   </div>
   </div>
-  <div class="sad-info"></div>
+  <div class="sad-info">
+    <div class="sad-info-eyebrow">Workouts</div>
+    <h3>Log what you lift, <span class="accent-text-gradient">watch it add up</span></h3>
+    <p>Track sets, reps, and weight for every exercise, then see your strength progress charted over time.</p>
+    <ul class="pricing-list">
+      <li><span class="check">✓</span> Log a set in under 10 seconds</li>
+      <li><span class="check">✓</span> See your best lift for every exercise</li>
+      <li><span class="check">✓</span> Charts your progress week over week</li>
+    </ul>
+  </div>
 </div>
 </div>
     </div>
